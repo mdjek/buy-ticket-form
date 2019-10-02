@@ -1,26 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ConfigProvider } from 'antd';
+import moment from 'moment';
+import 'moment/locale/ru';
+import ruRu from 'antd/es/locale/ru_RU';
+import BuyTicketForm from './components/BuyTicketForm';
 
-function App() {
-  return (
+moment.locale('ru');
+
+const App = () => (
+  <ConfigProvider locale={ruRu}>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header className="header">Buy Ticket Form</header>
+      <main>
+        <div className="wrapper">
+          <BuyTicketForm />
+        </div>
+      </main>
     </div>
-  );
-}
+  </ConfigProvider>
+);
 
 export default App;
