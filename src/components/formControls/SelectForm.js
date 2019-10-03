@@ -1,8 +1,15 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Select } from 'antd';
-import styles from './InputForm.module.scss';
 
-const SelectForm = ({ error, name, children, handleChange, value, ...props }) => {
+const SelectForm = ({
+  error,
+  name,
+  children,
+  handleChange,
+  value,
+  ...props
+}) => {
   return (
     <Fragment>
       <Select
@@ -13,9 +20,20 @@ const SelectForm = ({ error, name, children, handleChange, value, ...props }) =>
       >
         {children}
       </Select>
-      {error && <span className={styles.error}>{error}</span>}
+      {error && <span className="error">{error}</span>}
     </Fragment>
   );
+};
+
+SelectForm.propTypes = {
+  name: PropTypes.string,
+  error: PropTypes.string,
+  handleChange: PropTypes.func,
+  value: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
 };
 
 export default SelectForm;

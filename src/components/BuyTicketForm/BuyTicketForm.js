@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react';
 import { Formik } from 'formik';
 import { Button, Row, Col, Icon } from 'antd';
 import * as Yup from 'yup';
-import { LineProgress } from '..';
+import LineProgress from '../LineProgress/LineProgress';
 import BuyTicketFormStep from './BuyTicketFormStep';
 import styles from './BuyTicketForm.module.scss';
 
@@ -63,10 +63,7 @@ const BuyTicketForm = () => {
     payment: Yup.object().shape({
       card: Yup.object().shape({
         number: Yup.string()
-          .matches(
-            /^[0-9]{16}$/,
-            'Заполните верно номер карты',
-          )
+          .matches(/^[0-9]{16}$/, 'Заполните верно номер карты')
           .required('Заполните номер карты'),
         valid_thru: Yup.string()
           .matches(/^[0-9]{2}\/[0-9]{2}/, 'Заполните верно срок действия карты')

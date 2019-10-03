@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Col, Row, Select } from 'antd';
 import InputMask from 'react-input-mask';
@@ -295,6 +296,12 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
   };
 
   return renderStep(stepData.step);
+};
+
+CheckboxForm.propTypes = {
+  stepData: PropTypes.shape({}),
+  setStepData: PropTypes.shape({}),
+  formikProps: PropTypes.shape({}),
 };
 
 export default BuyTicketFormStep;

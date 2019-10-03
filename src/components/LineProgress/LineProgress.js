@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styles from './LineProgress.module.scss';
 
 const LineProgress = ({ stepData }) => {
@@ -12,6 +13,13 @@ const LineProgress = ({ stepData }) => {
       />
     </div>
   );
+};
+
+LineProgress.propTypes = {
+  stepData: PropTypes.shape({
+    step: PropTypes.number,
+    stepsCount: PropTypes.number,
+  }),
 };
 
 export default LineProgress;
