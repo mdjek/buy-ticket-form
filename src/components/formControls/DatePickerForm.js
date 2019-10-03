@@ -16,7 +16,7 @@ const DatePickerForm = ({ error, name, handleChange, value, ...props }) => (
       style={{ width: '100%' }}
       {...props}
     />
-    {error && <span className="error">{error}</span>}
+    <div>{error && <span className="error">{error}</span>}</div>
   </Fragment>
 );
 
@@ -24,7 +24,7 @@ DatePickerForm.propTypes = {
   error: PropTypes.string,
   handleChange: PropTypes.func,
   name: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.shape({}),
 };
 
 export default DatePickerForm;

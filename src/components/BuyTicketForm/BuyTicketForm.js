@@ -28,7 +28,7 @@ const BuyTicketForm = () => {
   };
 
   const [stepData, setStepData] = useState({
-    step: 1,
+    step: 3,
     stepsCount: 3,
   });
 
@@ -127,6 +127,7 @@ const BuyTicketForm = () => {
               <Col>
                 {stepData.step > 1 && (
                   <Button
+                    className={styles.prev}
                     onClick={() => {
                       setStepData({ ...stepData, step: stepData.step - 1 });
                       setTouched({});
@@ -135,7 +136,7 @@ const BuyTicketForm = () => {
                     }}
                   >
                     <Icon type="left" />
-                    Назад
+                    <span className={styles.text}>Назад</span>
                   </Button>
                 )}
               </Col>

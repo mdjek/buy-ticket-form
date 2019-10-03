@@ -3,6 +3,20 @@
   margin-bottom: 15px;
 }
 
+.ant-row {
+  [class*='ant-col-xs'] {
+    margin-bottom: 15px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (min-width: 576px) {
+      margin-bottom: 0;
+    }
+  }
+}
+
 .ant-row .caption {
   margin-bottom: 3px;
 }

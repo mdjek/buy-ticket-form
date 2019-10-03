@@ -4,3 +4,19 @@
   max-width: 560px;
   margin: 0 auto;
 }
+
+.prev {
+  padding: 0 6px 0 10px;
+
+  @media (min-width: 576px) {
+    padding: 0 15px;
+  }
+
+  .text {
+    text-indent: -9999px;
+
+    @media (min-width: 576px) {
+      text-indent: 0;
+    }
+  }
+}

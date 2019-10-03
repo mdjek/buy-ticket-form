@@ -60,77 +60,89 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
           <Fragment>
             <h3>Данные пользователя</h3>
             <p className="required">Все поля обязательны</p>
-            <Row>
-              <Col>
-                <InputForm
-                  name="first_name"
-                  placeholder="Имя"
-                  value={values.first_name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.first_name && errors.first_name}
-                />
+            <Row gutter={20}>
+              <Col xs={24} sm={12}>
+                <label>
+                  <div className="caption">Имя</div>
+                  <InputForm
+                    name="first_name"
+                    placeholder="Имя"
+                    value={values.first_name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.first_name && errors.first_name}
+                  />
+                </label>
+              </Col>
+              <Col xs={24} sm={12}>
+                <label>
+                  <div className="caption">Фамилия</div>
+                  <InputForm
+                    name="last_name"
+                    placeholder="Фамилия"
+                    value={values.last_name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.last_name && errors.last_name}
+                  />
+                </label>
               </Col>
             </Row>
 
             <Row>
               <Col>
-                <InputForm
-                  name="last_name"
-                  placeholder="Фамилия"
-                  value={values.last_name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.last_name && errors.last_name}
-                />
+                <label>
+                  <div className="caption">Почта</div>
+                  <InputForm
+                    type="email"
+                    name="email"
+                    placeholder="user@mail.ru"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.email && errors.email}
+                  />
+                </label>
               </Col>
             </Row>
 
             <Row>
               <Col>
-                <InputForm
-                  type="email"
-                  name="email"
-                  placeholder="user@mail.ru"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.email && errors.email}
-                />
-              </Col>
-            </Row>
-
-            <Row>
-              <Col span={9}>
-                <DatePickerForm
-                  name="birthday"
-                  value={
-                    values.birthday && moment(values.birthday, 'YYYY-MM-DD')
-                  }
-                  style={{ width: '100%' }}
-                  handleChange={setFieldValue}
-                  error={touched.birthday && errors.birthday}
-                />
+                <label>
+                  <div className="caption">Дата рождения</div>
+                  <DatePickerForm
+                    name="birthday"
+                    value={
+                      values.birthday && moment(values.birthday, 'YYYY-MM-DD')
+                    }
+                    style={{ maxWidth: '180px' }}
+                    handleChange={setFieldValue}
+                    error={touched.birthday && errors.birthday}
+                  />
+                </label>
               </Col>
             </Row>
 
             <Row>
               <Col>
-                <Select
-                  name="payment.type"
-                  placeholder="Выберите способ оплаты"
-                  value={values.payment.type || undefined}
-                  onChange={handleSelectTypePayment}
-                >
-                  <Option value="card">Оплатить картой</Option>
-                  <Option value="cash">На месте</Option>
-                </Select>
-                {errors.payment &&
-                  errors.payment.type &&
-                  touched.payment &&
-                  touched.payment.type && (
-                    <span className="error">{errors.payment.type}</span>
-                  )}
+                <label>
+                  <div className="caption">Способ оплаты</div>
+                  <Select
+                    name="payment.type"
+                    placeholder="Выберите способ оплаты"
+                    value={values.payment.type || undefined}
+                    onChange={handleSelectTypePayment}
+                  >
+                    <Option value="card">Оплатить картой</Option>
+                    <Option value="cash">На месте</Option>
+                  </Select>
+                  {errors.payment &&
+                    errors.payment.type &&
+                    touched.payment &&
+                    touched.payment.type && (
+                      <span className="error">{errors.payment.type}</span>
+                    )}
+                </label>
               </Col>
             </Row>
 
@@ -184,7 +196,7 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
             </Row>
 
             <Row>
-              <Col span={6}>
+              <Col>
                 <label>
                   <div className="caption">Действует до</div>
                   <InputMask
@@ -197,6 +209,7 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
                     value={values.payment.card.valid_thru}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    style={{ maxWidth: '180px' }}
                   />
                   <div>
                     {errors.payment &&

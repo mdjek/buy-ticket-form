@@ -31,7 +31,7 @@
       }
     ],
     "jsx-a11y/label-has-associated-control": [ 2, {
-      "controlComponents": ["Input", "InputForm", "SelectForm", "InputMask", "Select"]
+      "controlComponents": ["Input", "InputForm", "SelectForm", "DatePickerForm", "InputMask", "Select"]
     }]
   }
 }
