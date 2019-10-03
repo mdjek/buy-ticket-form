@@ -1,22 +1,11 @@
-import React from 'react';
-import InputMask from 'react-input-mask';
+import React, { Fragment } from 'react';
+import { Input } from 'antd';
 
-const InputForm = (props) => {
-  const { value, onChange, type, placeholder, mask } = props;
-
-  return (
-    <InputMask mask={mask} value={value}>
-      {() => (
-        <input
-          className="ant-input"
-          placeholder={placeholder}
-          type={type}
-          onChange={onChange}
-          {...props}
-        />
-      )}
-    </InputMask>
-  );
-};
+const InputForm = ({ error, type, ...props }) => (
+  <Fragment>
+    <Input type={type || 'text'} {...props} />
+    {error && <span className="error">{error}</span>}
+  </Fragment>
+);
 
 export default InputForm;

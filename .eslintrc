@@ -2,7 +2,8 @@
   "extends": [
     "airbnb",
     "react-app",
-    "prettier"
+    "prettier",
+    "prettier/react"
   ],
   "plugins": ["prettier"],
   "parser": "babel-eslint",
@@ -18,7 +19,6 @@
   "rules": {
     "react/jsx-props-no-spreading": "off",
     "react/jsx-curly-newline": "off",
-    "indent": ["error", 2, { "SwitchCase": 1 }],
     "react/jsx-fragments": ["error", "element"],
     "react/require-default-props": ["off"],
     "react/jsx-indent": ["error", 2],
@@ -31,7 +31,7 @@
       }
     ],
     "jsx-a11y/label-has-associated-control": [ 2, {
-      "controlComponents": ["Input", "InputForm", "InputMask", "Select"]
+      "controlComponents": ["Input", "InputForm", "SelectForm", "InputMask", "Select"]
     }]
   }
 }
