@@ -2,9 +2,11 @@ import React, { useState, Fragment } from 'react';
 import { Formik } from 'formik';
 import { Button, Row, Col, Icon } from 'antd';
 import * as Yup from 'yup';
-import LineProgress from '../LineProgress/LineProgress';
+import BuyProgress from '../BuyProgress/BuyProgress';
 import BuyTicketFormStep from './BuyTicketFormStep';
 import styles from './BuyTicketForm.module.scss';
+
+const btnStepText = ['Заполнить данные пользователя', 'Заполнить данные карты'];
 
 const BuyTicketForm = () => {
   const initialValues = {
@@ -26,7 +28,7 @@ const BuyTicketForm = () => {
   };
 
   const [stepData, setStepData] = useState({
-    step: 3,
+    step: 1,
     stepsCount: 3,
   });
 
@@ -77,7 +79,6 @@ const BuyTicketForm = () => {
 
   return (
     <div>
-      <LineProgress stepData={stepData} />
       <Formik
         enableReinitialize
         validationSchema={schemaArray[stepData.step - 1]}
@@ -103,6 +104,7 @@ const BuyTicketForm = () => {
           setSubmitting,
         }) => (
           <form className={styles.form} onSubmit={handleSubmit}>
+            <BuyProgress stepData={stepData} />
             <BuyTicketFormStep
               stepData={stepData}
               setStepData={setStepData}
@@ -157,7 +159,7 @@ const BuyTicketForm = () => {
                       });
                     }}
                   >
-                    Следующий шаг
+                    {btnStepText[stepData.step - 1]}
                     <Icon type="right" />
                   </Button>
                 ) : (
@@ -167,7 +169,7 @@ const BuyTicketForm = () => {
                       className="ant-btn ant-btn-primary"
                       disabled={isSubmitting}
                     >
-                      submit
+                      Купить билет
                     </button>
                     <Button type="danger" ghost disabled={isSubmitting}>
                       bad submit

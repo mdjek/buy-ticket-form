@@ -23,10 +23,9 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
       values,
     } = formikProps;
 
-    console.log(values);
-
-    console.log(touched);
-    console.log(errors);
+    // console.log(values);
+    // console.log(touched);
+    // console.log(errors);
 
     const handleSelectTypePayment = (value) => {
       let stepsCount;
