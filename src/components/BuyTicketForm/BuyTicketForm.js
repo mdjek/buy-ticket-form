@@ -26,8 +26,8 @@ const BuyTicketForm = () => {
   };
 
   const [stepData, setStepData] = useState({
-    step: 2,
-    stepsCount: 2,
+    step: 3,
+    stepsCount: 3,
   });
 
   const Step1Schema = Yup.object().shape({
@@ -76,7 +76,9 @@ const BuyTicketForm = () => {
         enableReinitialize
         validationSchema={schemaArray[stepData.step - 1]}
         initialValues={initialValues}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => {
+          console.log(values);
+        }}
       >
         {({
           values,
@@ -154,9 +156,13 @@ const BuyTicketForm = () => {
                   </Button>
                 ) : (
                   <Fragment>
-                    <Button type="primary" disabled={isSubmitting}>
+                    <button
+                      type="submit"
+                      className="ant-btn ant-btn-primary"
+                      disabled={isSubmitting}
+                    >
                       submit
-                    </Button>
+                    </button>
                     <Button type="danger" ghost disabled={isSubmitting}>
                       bad submit
                     </Button>
