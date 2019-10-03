@@ -3,7 +3,7 @@ import { ConfigProvider } from 'antd';
 import moment from 'moment';
 import 'moment/locale/ru';
 import ruRu from 'antd/es/locale/ru_RU';
-import BuyTicketForm from './components/BuyTicketForm';
+import BuyTicketForm from './components/BuyTicketForm/BuyTicketForm';
 
 moment.locale('ru');
 

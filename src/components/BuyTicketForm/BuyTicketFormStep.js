@@ -1,72 +1,19 @@
-import React, { useState, Fragment } from 'react';
-import { Formik } from 'formik';
-import { Button, Row, Col, Select, Checkbox, Icon } from 'antd';
-import InputMask from 'react-input-mask';
-import * as Yup from 'yup';
-import { InputForm, SelectForm, DatePickerForm } from './formControls';
-import { LineProgress } from '.';
-import styles from './BuyTicketForm.module.scss';
+import React, { Fragment } from 'react';
 import moment from 'moment';
+import { Col, Row, Select } from 'antd';
+import InputMask from 'react-input-mask';
+import {
+  CheckboxForm,
+  DatePickerForm,
+  InputForm,
+  SelectForm,
+} from '../formControls';
+import styles from './BuyTicketForm.module.scss';
 
-const BuyTicketForm = () => {
-  const initialValues = {
-    performance: null,
-    session: null,
-    first_name: '',
-    last_name: '',
-    birthday: null,
-    email: '',
-    payment: {
-      type: null,
-      card: {
-        number: '',
-        valid_thru: '',
-        name: '',
-      },
-    },
-  };
-
-  const [stepData, setStepData] = useState({
-    step: 2,
-    stepsCount: 2,
-  });
-
+const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
   const { Option } = Select;
 
-  const Step1Schema = Yup.object().shape({
-    performance: Yup.string().required('Выберите событие').nullable(),
-    session: Yup.string()
-      .required('Выберите время')
-      .nullable(),
-  });
-
-  const Step2Schema = Yup.object().shape({
-    first_name: Yup.string().required('Заполните имя'),
-    last_name: Yup.string().required('Заполните фамилию'),
-    email: Yup.string()
-      .email('Заполните правильный емейл')
-      .required('Заполните емейл'),
-    birthday: Yup.string()
-      .required('Заполните дату рождения')
-      .nullable(),
-    payment: Yup.object().shape({
-      type: Yup.string()
-        .required('Выберите способ оплаты')
-        .nullable(),
-    }),
-  });
-
-  const Step3Schema = Yup.object().shape({
-    payment: Yup.object().shape({
-      number: Yup.string().required('Заполните номер карты'),
-      valid_thru: Yup.string().required('Заполните срок действия карты'),
-      name: Yup.string().required('Заполните имя, фамилию владельца карты'),
-    }),
-  });
-
-  const schemaArray = [Step1Schema, Step2Schema, Step3Schema];
-
-  const renderStep = (step, data) => {
+  const renderStep = (step) => {
     const {
       errors,
       handleChange,
@@ -74,7 +21,7 @@ const BuyTicketForm = () => {
       touched,
       setFieldValue,
       values,
-    } = data;
+    } = formikProps;
 
     console.log(values);
     console.log(errors);
@@ -148,7 +95,9 @@ const BuyTicketForm = () => {
               <Col span={9}>
                 <DatePickerForm
                   name="birthday"
-                  value={values.birthday && moment(values.birthday, 'YYYY-MM-DD')}
+                  value={
+                    values.birthday && moment(values.birthday, 'YYYY-MM-DD')
+                  }
                   style={{ width: '100%' }}
                   handleChange={setFieldValue}
                   error={touched.birthday && errors.birthday}
@@ -178,7 +127,13 @@ const BuyTicketForm = () => {
 
             <Row>
               <Col>
-                <Checkbox name="accept">Согласен с условиями</Checkbox>
+                <CheckboxForm
+                  checked={values.acceptRules}
+                  name="acceptRules"
+                  label="Согласен с условиями"
+                  error={touched.acceptRules && errors.acceptRules}
+                  handleChange={setFieldValue}
+                />
               </Col>
             </Row>
           </Fragment>
@@ -330,102 +285,7 @@ const BuyTicketForm = () => {
     }
   };
 
-  return (
-    <div>
-      <LineProgress stepData={stepData} />
-      <Formik
-        enableReinitialize
-        validationSchema={schemaArray[stepData.step - 1]}
-        initialValues={initialValues}
-        onSubmit={(values) => console.log(values)}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-          validateForm,
-          setTouched,
-          isValid,
-          setFieldValue,
-          setErrors,
-          submitForm,
-          setSubmitting,
-        }) => (
-          <form className={styles.form} onSubmit={handleSubmit}>
-            {renderStep(stepData.step, {
-              values,
-              errors,
-              handleChange,
-              handleBlur,
-              touched,
-              setFieldValue,
-              isValid,
-              setSubmitting,
-            })}
-            <Row
-              type="flex"
-              justify="space-between"
-              style={{ marginTop: '30px' }}
-            >
-              <Col>
-                {stepData.step > 1 && (
-                  <Button
-                    onClick={() => {
-                      setStepData({ ...stepData, step: stepData.step - 1 });
-                      setTouched({});
-                      setErrors({});
-                      setSubmitting(false);
-                    }}
-                  >
-                    <Icon type="left" />
-                    Назад
-                  </Button>
-                )}
-              </Col>
-              <Col>
-                {stepData.stepsCount !== stepData.step ? (
-                  <Button
-                    disabled={stepData.stepsCount === stepData.step}
-                    onClick={() => {
-                      submitForm().then(() => {
-                        if (isValid) {
-                          setStepData({
-                            ...stepData,
-                            step: stepData.step + 1,
-                          });
-
-                          validateForm();
-                          setTouched({});
-                          setErrors({});
-                          setSubmitting(false);
-                        }
-                      });
-                    }}
-                  >
-                    Следующий шаг
-                    <Icon type="right" />
-                  </Button>
-                ) : (
-                  <Fragment>
-                    <Button type="primary" disabled={isSubmitting}>
-                      submit
-                    </Button>
-                    <Button type="danger" ghost disabled={isSubmitting}>
-                      bad submit
-                    </Button>
-                  </Fragment>
-                )}
-              </Col>
-            </Row>
-          </form>
-        )}
-      </Formik>
-    </div>
-  );
+  return renderStep(stepData.step);
 };
 
-export default BuyTicketForm;
+export default BuyTicketFormStep;
