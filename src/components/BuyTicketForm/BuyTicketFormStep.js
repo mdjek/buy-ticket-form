@@ -22,6 +22,8 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
       values,
     } = formikProps;
 
+    console.log(values);
+
     console.log(touched);
     console.log(errors);
 
@@ -44,8 +46,12 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
       setFieldValue('payment.type', value);
     };
 
-    const hadleChangeCardName = (e) => {
+    const handleChangeName = (e) => {
       setFieldValue('payment.card.name', e.target.value.toUpperCase());
+    };
+
+    const handleChangeNumber = (e) => {
+      setFieldValue('payment.card.number', e.target.value.replace(/\s/g, ''));
     };
 
     switch (step) {
@@ -158,17 +164,20 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
                     mask="9999 9999 9999 9999"
                     size={20}
                     value={values.payment.card.number}
-                    onChange={handleChange}
+                    onChange={handleChangeNumber}
                     onBlur={handleBlur}
                   />
                 </label>
                 <div>
                   {errors.payment &&
-                    errors.payment.number &&
+                    errors.payment.card &&
+                    errors.payment.card.number &&
                     touched.payment &&
                     touched.payment.card &&
                     touched.payment.card.number && (
-                      <span className="error">{errors.payment.number}</span>
+                      <span className="error">
+                        {errors.payment.card.number}
+                      </span>
                     )}
                 </div>
               </Col>
@@ -191,12 +200,13 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
                   />
                   <div>
                     {errors.payment &&
-                      errors.payment.valid_thru &&
+                      errors.payment.card &&
+                      errors.payment.card.valid_thru &&
                       touched.payment &&
                       touched.payment.card &&
                       touched.payment.card.valid_thru && (
                         <span className="error">
-                          {errors.payment.valid_thru}
+                          {errors.payment.card.valid_thru}
                         </span>
                       )}
                   </div>
@@ -219,16 +229,19 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
                       A: '[A-Za-z ]',
                     }}
                     value={values.payment.card.name}
-                    onChange={hadleChangeCardName}
+                    onChange={handleChangeName}
                     onBlur={handleBlur}
                   />
                   <div>
                     {errors.payment &&
-                      errors.payment.name &&
+                      errors.payment.card &&
+                      errors.payment.card.name &&
                       touched.payment &&
                       touched.payment.card &&
                       touched.payment.card.name && (
-                        <span className="error">{errors.payment.name}</span>
+                        <span className="error">
+                          {errors.payment.card.name}
+                        </span>
                       )}
                   </div>
                 </label>
@@ -244,7 +257,7 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
             <Row>
               <Col>
                 <label>
-                  <div className="caption">Спектакль</div>
+                  <div className="caption">Событие</div>
                   <SelectForm
                     name="performance"
                     placeholder="Выберите событие"

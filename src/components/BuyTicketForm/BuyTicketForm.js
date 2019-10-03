@@ -61,9 +61,18 @@ const BuyTicketForm = () => {
 
   const Step3Schema = Yup.object().shape({
     payment: Yup.object().shape({
-      number: Yup.string().required('Заполните номер карты'),
-      valid_thru: Yup.string().required('Заполните срок действия карты'),
-      name: Yup.string().required('Заполните имя, фамилию владельца карты'),
+      card: Yup.object().shape({
+        number: Yup.string()
+          .matches(
+            /^[0-9]{16}$/,
+            'Заполните верно номер карты',
+          )
+          .required('Заполните номер карты'),
+        valid_thru: Yup.string()
+          .matches(/^[0-9]{2}\/[0-9]{2}/, 'Заполните верно срок действия карты')
+          .required('Заполните срок действия карты'),
+        name: Yup.string().required('Заполните имя, фамилию владельца карты'),
+      }),
     }),
   });
 
