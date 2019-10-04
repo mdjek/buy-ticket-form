@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect, useCallback } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { Formik } from 'formik';
 import { Button, Row, Col, Icon } from 'antd';
 import * as Yup from 'yup';
@@ -43,12 +43,12 @@ const BuyTicketForm = () => {
   const [stepData, setStepData] = useState(getInitialStepData());
   const [isInitialValid, setInitialValid] = useState(false);
 
-  const getLocalInitialValues = useCallback(() => {
+  const getLocalInitialValues = () => {
     const buyTicketFormData = JSON.parse(
       localStorage.getItem('buyTicketFormData'),
     );
     return { ...initialValues, ...buyTicketFormData };
-  });
+  };
 
   useEffect(() => {
     localStorage.setItem('buyTicketStepData', JSON.stringify(stepData));
@@ -105,11 +105,11 @@ const BuyTicketForm = () => {
     );
 
     schemaArray[stepData.step - 1]
-      .isValid(getLocalInitialValues())
+      .isValid({ ...initialValues, ...buyTicketFormData })
       .then((valid) => {
         setInitialValid(valid);
       });
-  }, [getLocalInitialValues, initialValues, schemaArray, stepData.step]);
+  }, [initialValues, schemaArray, stepData.step]);
 
   return (
     <div>
