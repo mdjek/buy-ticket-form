@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect, useCallback } from 'react';
 import { Formik } from 'formik';
 import { Button, Row, Col, Icon } from 'antd';
 import * as Yup from 'yup';
@@ -18,7 +18,7 @@ const BuyTicketForm = () => {
     email: '',
     acceptRules: false,
     payment: {
-      type: null,
+      type: 'card',
       card: {
         number: '',
         valid_thru: '',
@@ -27,8 +27,8 @@ const BuyTicketForm = () => {
     },
   };
 
-  // localStorage.removeItem('buyTicketStepData');
-  // localStorage.removeItem('buyTicketFormData');
+  localStorage.removeItem('buyTicketStepData');
+  localStorage.removeItem('buyTicketFormData');
 
   const defaultStepData = {
     step: 1,
@@ -41,17 +41,26 @@ const BuyTicketForm = () => {
   };
 
   const [stepData, setStepData] = useState(getInitialStepData());
+  const [isInitialValid, setInitialValid] = useState(false);
+
+  const getLocalInitialValues = useCallback(() => {
+    const buyTicketFormData = JSON.parse(
+      localStorage.getItem('buyTicketFormData'),
+    );
+    return { ...initialValues, ...buyTicketFormData };
+  });
 
   useEffect(() => {
     localStorage.setItem('buyTicketStepData', JSON.stringify(stepData));
   }, [stepData]);
 
-  const getLocalInitialValue = () => {
-    const buyTicketFormData = JSON.parse(
-      localStorage.getItem('buyTicketFormData'),
-    );
-    return { ...initialValues, ...buyTicketFormData };
-  };
+  useEffect(() => {
+    schemaArray[stepData.step - 1]
+      .isValid(getLocalInitialValues())
+      .then((valid) => {
+        setInitialValid(valid);
+      });
+  }, [getLocalInitialValues, schemaArray, stepData.step]);
 
   const Step1Schema = Yup.object().shape({
     performance: Yup.string()
@@ -101,19 +110,21 @@ const BuyTicketForm = () => {
   return (
     <div>
       <Formik
-        // enableReinitialize
+        enableReinitialize
         validationSchema={schemaArray[stepData.step - 1]}
-        initialValues={getLocalInitialValue()}
-        // isInitialValid={schemaArray[stepData.step - 1].isValidSync(initialValues)}
-        // isInitialValid
+        initialValues={getLocalInitialValues()}
+        isInitialValid={isInitialValid}
         initialErrors
-        onSubmit={(values) => {
+        onSubmit={(values, { setSubmitting }) => {
           if (stepData.step === stepData.stepsCount) {
             localStorage.removeItem('buyTicketStepData');
             localStorage.removeItem('buyTicketFormData');
+
+            const { acceptRules, performance, ...valuesForm } = values;
+            console.log(valuesForm);
           }
-          const { acceptRules, performance, ...valuesForm } = values;
-          console.log(valuesForm);
+
+          setSubmitting(false);
         }}
       >
         {({
@@ -161,7 +172,6 @@ const BuyTicketForm = () => {
                       setStepData({ ...stepData, step: stepData.step - 1 });
                       setTouched({});
                       setErrors({});
-                      setSubmitting(false);
                     }}
                   >
                     <Icon type="left" />
@@ -184,7 +194,6 @@ const BuyTicketForm = () => {
                           validateForm();
                           setTouched({});
                           setErrors({});
-                          setSubmitting(false);
                         }
                       });
                     }}

@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import get from 'lodash.get';
 import moment from 'moment';
 import { Col, Row, Select } from 'antd';
 import InputMask from 'react-input-mask';
@@ -129,10 +130,8 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
                     <Option value="card">Оплатить картой</Option>
                     <Option value="cash">На месте</Option>
                   </Select>
-                  {errors.payment &&
-                    errors.payment.type &&
-                    touched.payment &&
-                    touched.payment.type && (
+                  {get(errors, 'payment.type') &&
+                    get(touched, 'payment.type') && (
                       <span className="error">{errors.payment.type}</span>
                     )}
                 </label>
@@ -174,12 +173,8 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
                   />
                 </label>
                 <div>
-                  {errors.payment &&
-                    errors.payment.card &&
-                    errors.payment.card.number &&
-                    touched.payment &&
-                    touched.payment.card &&
-                    touched.payment.card.number && (
+                  {get(errors, 'payment.card.number') &&
+                    get(touched, 'payment.card.number') && (
                       <span className="error">
                         {errors.payment.card.number}
                       </span>
@@ -205,12 +200,8 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
                     style={{ maxWidth: '180px' }}
                   />
                   <div>
-                    {errors.payment &&
-                      errors.payment.card &&
-                      errors.payment.card.valid_thru &&
-                      touched.payment &&
-                      touched.payment.card &&
-                      touched.payment.card.valid_thru && (
+                    {get(errors, 'payment.card.valid_thru') &&
+                      get(touched, 'payment.card.valid_thru') && (
                         <span className="error">
                           {errors.payment.card.valid_thru}
                         </span>
@@ -239,12 +230,8 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
                     onBlur={handleBlur}
                   />
                   <div>
-                    {errors.payment &&
-                      errors.payment.card &&
-                      errors.payment.card.name &&
-                      touched.payment &&
-                      touched.payment.card &&
-                      touched.payment.card.name && (
+                    {get(errors, 'payment.card.name') &&
+                      get(touched, 'payment.card.name') && (
                         <span className="error">
                           {errors.payment.card.name}
                         </span>
