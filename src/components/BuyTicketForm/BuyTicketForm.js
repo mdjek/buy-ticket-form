@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { Formik } from 'formik';
 import { Button, Row, Col, Icon } from 'antd';
 import * as Yup from 'yup';
@@ -27,10 +27,31 @@ const BuyTicketForm = () => {
     },
   };
 
-  const [stepData, setStepData] = useState({
-    step: 3,
+  // localStorage.removeItem('buyTicketStepData');
+  // localStorage.removeItem('buyTicketFormData');
+
+  const defaultStepData = {
+    step: 1,
     stepsCount: 3,
-  });
+  };
+
+  const getInitialStepData = () => {
+    const localStepData = JSON.parse(localStorage.getItem('buyTicketStepData'));
+    return { ...defaultStepData, ...localStepData };
+  };
+
+  const [stepData, setStepData] = useState(getInitialStepData());
+
+  useEffect(() => {
+    localStorage.setItem('buyTicketStepData', JSON.stringify(stepData));
+  }, [stepData]);
+
+  const getLocalInitialValue = () => {
+    const buyTicketFormData = JSON.parse(
+      localStorage.getItem('buyTicketFormData'),
+    );
+    return { ...initialValues, ...buyTicketFormData };
+  };
 
   const Step1Schema = Yup.object().shape({
     performance: Yup.string()
@@ -80,11 +101,19 @@ const BuyTicketForm = () => {
   return (
     <div>
       <Formik
-        enableReinitialize
+        // enableReinitialize
         validationSchema={schemaArray[stepData.step - 1]}
-        initialValues={initialValues}
+        initialValues={getLocalInitialValue()}
+        // isInitialValid={schemaArray[stepData.step - 1].isValidSync(initialValues)}
+        // isInitialValid
+        initialErrors
         onSubmit={(values) => {
-          console.log(values);
+          if (stepData.step === stepData.stepsCount) {
+            localStorage.removeItem('buyTicketStepData');
+            localStorage.removeItem('buyTicketFormData');
+          }
+          const { acceptRules, performance, ...valuesForm } = values;
+          console.log(valuesForm);
         }}
       >
         {({

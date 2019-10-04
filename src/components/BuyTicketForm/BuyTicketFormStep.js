@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Col, Row, Select } from 'antd';
@@ -12,6 +12,13 @@ import {
 
 const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
   const { Option } = Select;
+
+  useEffect(() => {
+    localStorage.setItem(
+      'buyTicketFormData',
+      JSON.stringify(formikProps.values),
+    );
+  }, [formikProps.values]);
 
   const renderStep = (step) => {
     const {
@@ -28,19 +35,9 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
     // console.log(errors);
 
     const handleSelectTypePayment = (value) => {
-      let stepsCount;
-
-      if (value === 'card') {
-        stepsCount = stepData.stepsCount + 1;
-      } else if (stepData.stepsCount > 2) {
-        stepsCount = stepData.stepsCount - 1;
-      } else {
-        stepsCount = stepData.stepsCount;
-      }
-
       setStepData({
         ...stepData,
-        stepsCount,
+        stepsCount: value === 'card' ? 3 : 2,
       });
 
       setFieldValue('payment.type', value);
@@ -130,7 +127,7 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
                   <Select
                     name="payment.type"
                     placeholder="Выберите способ оплаты"
-                    value={values.payment.type || undefined}
+                    value={(values.payment && values.payment.type) || undefined}
                     onChange={handleSelectTypePayment}
                   >
                     <Option value="card">Оплатить картой</Option>
