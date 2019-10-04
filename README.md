@@ -21,5 +21,5 @@ https://mdjek.github.io/buy-ticket-form/
 ### `yarn i`
 ### `yarn start`
 
-Для запуска проекта:
+Для сборки проекта:
 ### `yarn run build`
