@@ -19,9 +19,9 @@ https://mdjek.github.io/buy-ticket-form/
 * Husky
 * Lint-staged
 
-## Для запуска проекта:
+## Run project
 ### `yarn i`
 ### `yarn start`
 
-Для сборки проекта:
+## Build project
 ### `yarn run build`
