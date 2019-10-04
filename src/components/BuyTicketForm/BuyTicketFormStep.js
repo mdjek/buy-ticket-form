@@ -72,18 +72,6 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
           onClick={() => {
             setFieldValue('performance', item.id);
             setFieldValue('performanceTitle', item.attributes.title);
-
-            // if (performanceData.sessions.data) {
-            //   setPerformanceData({
-            //     ...performanceData,
-            //     sessions: {
-            //       data: performanceData.sessions.data.filter(
-            //         (sessionItem) =>
-            //           item.id === sessionItem.relationships.performance.data.id,
-            //       ),
-            //     },
-            //   });
-            // }
           }}
         >
           Выбрать
@@ -323,7 +311,7 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
               <Col>
                 {performanceData.data && !values.performance ? (
                   renderPerformanceData()
-                ) : values.performanceTitle ? (
+                ) : values.performanceTitle && values.performance ? (
                   <div className={styles['selected-item']}>
                     {`«${values.performanceTitle}» `}
                     <Button
@@ -361,8 +349,15 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
                   <SelectForm
                     disabled={!values.performance || !performanceData.sessions}
                     name="session"
-                    placeholder="Выберите подходящее время"
-                    value={values.session}
+                    placeholder={
+                      !(values.performance && !performanceData.sessions) &&
+                      'Выберите подходящее время'
+                    }
+                    value={
+                      !(values.performance && !performanceData.sessions)
+                        ? values.session
+                        : ''
+                    }
                     handleChange={setFieldValue}
                     error={touched.session && errors.session}
                   >
