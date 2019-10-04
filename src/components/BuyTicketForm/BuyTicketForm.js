@@ -43,12 +43,12 @@ const BuyTicketForm = () => {
   const [stepData, setStepData] = useState(getInitialStepData());
   const [isInitialValid, setInitialValid] = useState(false);
 
-  const getLocalInitialValues = () => {
+  const getLocalInitialValues = useCallback(() => {
     const buyTicketFormData = JSON.parse(
       localStorage.getItem('buyTicketFormData'),
     );
     return { ...initialValues, ...buyTicketFormData };
-  };
+  });
 
   useEffect(() => {
     localStorage.setItem('buyTicketStepData', JSON.stringify(stepData));
@@ -105,11 +105,11 @@ const BuyTicketForm = () => {
     );
 
     schemaArray[stepData.step - 1]
-      .isValid({ ...initialValues, ...buyTicketFormData })
+      .isValid(getLocalInitialValues())
       .then((valid) => {
         setInitialValid(valid);
       });
-  }, [initialValues, schemaArray, stepData.step]);
+  }, [getLocalInitialValues, initialValues, schemaArray, stepData.step]);
 
   return (
     <div>
