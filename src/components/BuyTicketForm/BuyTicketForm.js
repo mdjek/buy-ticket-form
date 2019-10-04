@@ -28,9 +28,6 @@ const BuyTicketForm = () => {
     },
   };
 
-  // localStorage.removeItem('buyTicketStepData');
-  // localStorage.removeItem('buyTicketFormData');
-
   const defaultStepData = {
     step: 1,
     stepsCount: 3,
@@ -110,12 +107,12 @@ const BuyTicketForm = () => {
       .then((valid) => {
         setInitialValid(valid);
       });
-  }, [initialValues, schemaArray, stepData.step]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialValues]);
 
   return (
     <div>
       <Formik
-        // enableReinitialize
         validationSchema={schemaArray[stepData.step - 1]}
         initialValues={getLocalInitialValues()}
         isInitialValid={isInitialValid}
