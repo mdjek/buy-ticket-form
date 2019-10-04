@@ -12,12 +12,14 @@ https://mdjek.github.io/buy-ticket-form/
 * Yup
 * Сss-modules
 
+## Codestyle
 * Eslint
+* Airbnb
 * Prettier
 * Husky
 * Lint-staged
 
-Для запуска проекта:
+## Для запуска проекта:
 ### `yarn i`
 ### `yarn start`
 
