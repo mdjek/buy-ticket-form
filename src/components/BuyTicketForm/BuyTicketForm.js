@@ -54,18 +54,6 @@ const BuyTicketForm = () => {
     localStorage.setItem('buyTicketStepData', JSON.stringify(stepData));
   }, [stepData]);
 
-  useEffect(() => {
-    const buyTicketFormData = JSON.parse(
-      localStorage.getItem('buyTicketFormData'),
-    );
-
-    schemaArray[stepData.step - 1]
-      .isValid({ ...initialValues, ...buyTicketFormData })
-      .then((valid) => {
-        setInitialValid(valid);
-      });
-  }, [initialValues, schemaArray, stepData.step]);
-
   const Step1Schema = Yup.object().shape({
     performance: Yup.string()
       .required('Выберите событие')
@@ -110,6 +98,18 @@ const BuyTicketForm = () => {
   });
 
   const schemaArray = [Step1Schema, Step2Schema, Step3Schema];
+
+  useEffect(() => {
+    const buyTicketFormData = JSON.parse(
+      localStorage.getItem('buyTicketFormData'),
+    );
+
+    schemaArray[stepData.step - 1]
+      .isValid({ ...initialValues, ...buyTicketFormData })
+      .then((valid) => {
+        setInitialValid(valid);
+      });
+  }, [initialValues, schemaArray, stepData.step]);
 
   return (
     <div>
