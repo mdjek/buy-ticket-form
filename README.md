@@ -20,8 +20,8 @@ https://mdjek.github.io/buy-ticket-form/
 * Lint-staged
 
 ## Run project
-### `yarn i`
-### `yarn start`
+#### `yarn i`
+#### `yarn start`
 
 ## Build project
-### `yarn run build`
+#### `yarn run build`
