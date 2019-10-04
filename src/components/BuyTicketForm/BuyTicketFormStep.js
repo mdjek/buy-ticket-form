@@ -357,7 +357,7 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
                   <div className={styles.load} style={{ padding: 0 }} />
                 )}
                 <label>
-                  <div className="caption">Выбрать подходящее время</div>
+                  <div className="caption">Расписание</div>
                   <SelectForm
                     disabled={!values.performance || !performanceData.sessions}
                     name="session"
