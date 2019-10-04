@@ -43,24 +43,28 @@ const BuyTicketForm = () => {
   const [stepData, setStepData] = useState(getInitialStepData());
   const [isInitialValid, setInitialValid] = useState(false);
 
-  const getLocalInitialValues = useCallback(() => {
+  const getLocalInitialValues = () => {
     const buyTicketFormData = JSON.parse(
       localStorage.getItem('buyTicketFormData'),
     );
     return { ...initialValues, ...buyTicketFormData };
-  });
+  };
 
   useEffect(() => {
     localStorage.setItem('buyTicketStepData', JSON.stringify(stepData));
   }, [stepData]);
 
   useEffect(() => {
+    const buyTicketFormData = JSON.parse(
+      localStorage.getItem('buyTicketFormData'),
+    );
+
     schemaArray[stepData.step - 1]
-      .isValid(getLocalInitialValues())
+      .isValid({ ...initialValues, ...buyTicketFormData })
       .then((valid) => {
         setInitialValid(valid);
       });
-  }, [getLocalInitialValues, schemaArray, stepData.step]);
+  }, [initialValues, schemaArray, stepData.step]);
 
   const Step1Schema = Yup.object().shape({
     performance: Yup.string()
