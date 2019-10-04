@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './BuyProgress.module.scss';
 
 const BuyProgress = ({ stepData }) => {
-  const { step, stepsCount } = stepData;
+  const { step, stepsCount, finished } = stepData;
 
   return (
     <Fragment>
@@ -13,13 +13,16 @@ const BuyProgress = ({ stepData }) => {
           className={styles.progress}
         />
       </div>
-      <div className={styles.text}>{`Шаг ${step} из ${stepsCount}`}.</div>
+      {!finished && (
+        <div className={styles.text}>{`Шаг ${step} из ${stepsCount}`}.</div>
+      )}
     </Fragment>
   );
 };
 
 BuyProgress.propTypes = {
   stepData: PropTypes.shape({
+    finished: PropTypes.bool,
     step: PropTypes.number,
     stepsCount: PropTypes.number,
   }),

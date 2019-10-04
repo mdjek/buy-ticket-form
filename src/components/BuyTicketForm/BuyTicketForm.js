@@ -6,11 +6,12 @@ import BuyProgress from '../BuyProgress/BuyProgress';
 import BuyTicketFormStep from './BuyTicketFormStep';
 import styles from './BuyTicketForm.module.scss';
 
-const btnStepText = ['Заполнить данные пользователя', 'Заполнить данные карты'];
+const btnStepText = ['Перейти к покупке билета', 'Заполнить данные карты'];
 
 const BuyTicketForm = () => {
   const initialValues = {
     performance: null,
+    performanceTitle: '',
     session: null,
     first_name: '',
     last_name: '',
@@ -27,8 +28,8 @@ const BuyTicketForm = () => {
     },
   };
 
-  localStorage.removeItem('buyTicketStepData');
-  localStorage.removeItem('buyTicketFormData');
+  // localStorage.removeItem('buyTicketStepData');
+  // localStorage.removeItem('buyTicketFormData');
 
   const defaultStepData = {
     step: 1,
@@ -114,17 +115,23 @@ const BuyTicketForm = () => {
   return (
     <div>
       <Formik
-        enableReinitialize
+        // enableReinitialize
         validationSchema={schemaArray[stepData.step - 1]}
         initialValues={getLocalInitialValues()}
         isInitialValid={isInitialValid}
         initialErrors
         onSubmit={(values, { setSubmitting }) => {
           if (stepData.step === stepData.stepsCount) {
+            setStepData({ ...stepData, finished: true });
             localStorage.removeItem('buyTicketStepData');
             localStorage.removeItem('buyTicketFormData');
 
-            const { acceptRules, performance, ...valuesForm } = values;
+            const {
+              acceptRules,
+              performance,
+              performanceTitle,
+              ...valuesForm
+            } = values;
             console.log(valuesForm);
           }
 
@@ -169,7 +176,7 @@ const BuyTicketForm = () => {
               style={{ marginTop: '30px' }}
             >
               <Col>
-                {stepData.step > 1 && (
+                {!stepData.finished && stepData.step > 1 && (
                   <Button
                     className={styles.prev}
                     onClick={() => {
@@ -184,7 +191,7 @@ const BuyTicketForm = () => {
                 )}
               </Col>
               <Col>
-                {stepData.stepsCount !== stepData.step ? (
+                {!stepData.finished && stepData.stepsCount !== stepData.step ? (
                   <Button
                     disabled={stepData.stepsCount === stepData.step}
                     onClick={() => {
@@ -206,21 +213,36 @@ const BuyTicketForm = () => {
                     <Icon type="right" />
                   </Button>
                 ) : (
-                  <Fragment>
-                    <button
-                      type="submit"
-                      className="ant-btn ant-btn-primary"
-                      disabled={isSubmitting}
-                    >
-                      Купить билет
-                    </button>
-                    <Button type="danger" ghost disabled={isSubmitting}>
-                      bad submit
-                    </Button>
-                  </Fragment>
+                  !stepData.finished && (
+                    <Fragment>
+                      <button
+                        type="submit"
+                        className="ant-btn ant-btn-primary"
+                        disabled={isSubmitting}
+                      >
+                        Купить билет
+                      </button>
+                    </Fragment>
+                  )
                 )}
               </Col>
             </Row>
+            {stepData.finished && (
+              <Row type="flex" justify="flex-start">
+                <Col>
+                  <Button
+                    className="ant-btn ant-btn-primary"
+                    onClick={() => {
+                      setStepData({ ...defaultStepData });
+                      setTouched({});
+                      setErrors({});
+                    }}
+                  >
+                    <span className={styles.text}>Купить ещё билет</span>
+                  </Button>
+                </Col>
+              </Row>
+            )}
           </form>
         )}
       </Formik>

@@ -17,6 +17,7 @@
     "it": false
   },
   "rules": {
+    "no-nested-ternary": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-curly-newline": "off",
     "react/jsx-fragments": ["error", "element"],

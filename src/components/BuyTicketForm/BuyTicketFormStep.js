@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
 import moment from 'moment';
-import { Col, Row, Select } from 'antd';
+import { Col, Row, Select, Button } from 'antd';
 import InputMask from 'react-input-mask';
 import {
   CheckboxForm,
@@ -10,27 +10,100 @@ import {
   InputForm,
   SelectForm,
 } from '../formControls';
+import styles from './BuyTicketFormStep.module.scss';
+
+// data example
+import performances from '../../json/performances';
+import sessions from '../../json/sessions';
 
 const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
+  const {
+    errors,
+    handleChange,
+    handleBlur,
+    touched,
+    setFieldValue,
+    values,
+  } = formikProps;
+
   const { Option } = Select;
 
+  const [performanceData, setPerformanceData] = useState({
+    data: null,
+    sessions: null,
+  });
+
   useEffect(() => {
-    localStorage.setItem(
-      'buyTicketFormData',
-      JSON.stringify(formikProps.values),
+    setTimeout(() => {
+      setPerformanceData({
+        ...performanceData,
+        data: performances,
+        sessions,
+      });
+    }, 2000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [performanceData.sessions === null]);
+
+  useEffect(() => {
+    localStorage.setItem('buyTicketFormData', JSON.stringify(values));
+  }, [values]);
+
+  const renderPerformanceData = () =>
+    performanceData.data.data.map((item) => (
+      <div key={item.id} className={styles.performance}>
+        <p className={styles.title}>
+          {item.attributes && `«${item.attributes.title}»`}
+        </p>
+        <div className={styles.genres}>
+          {item.attributes && item.attributes.genres && (
+            <Fragment>
+              <span>Жанры: </span>
+              {item.attributes.genres.map((elem, index) => (
+                <span key={elem}>
+                  {elem}
+                  {index !== item.attributes.genres.length - 1 ? ', ' : ''}
+                </span>
+              ))}
+            </Fragment>
+          )}
+        </div>
+        <Button
+          type="primary"
+          onClick={() => {
+            setFieldValue('performance', item.id);
+            setFieldValue('performanceTitle', item.attributes.title);
+
+            // if (performanceData.sessions.data) {
+            //   setPerformanceData({
+            //     ...performanceData,
+            //     sessions: {
+            //       data: performanceData.sessions.data.filter(
+            //         (sessionItem) =>
+            //           item.id === sessionItem.relationships.performance.data.id,
+            //       ),
+            //     },
+            //   });
+            // }
+          }}
+        >
+          Выбрать
+        </Button>
+      </div>
+    ));
+
+  const renderSessions = () => {
+    const filteredSessions = performanceData.sessions.data.filter(
+      (item) => values.performance === item.relationships.performance.data.id,
     );
-  }, [formikProps.values]);
+
+    return filteredSessions.map((item) => (
+      <Option key={item.id} value={item.id}>
+        {item.attributes.from}
+      </Option>
+    ));
+  };
 
   const renderStep = (step) => {
-    const {
-      errors,
-      handleChange,
-      handleBlur,
-      touched,
-      setFieldValue,
-      values,
-    } = formikProps;
-
     const handleSelectTypePayment = (value) => {
       setStepData({
         ...stepData,
@@ -246,38 +319,60 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
         return (
           <Fragment>
             <h3>Выбрать событие</h3>
-            <p className="required">Все поля обязательны</p>
             <Row>
               <Col>
-                <label>
-                  <div className="caption">Событие</div>
-                  <SelectForm
-                    name="performance"
-                    placeholder="Выберите событие"
-                    value={values.performance}
-                    handleChange={setFieldValue}
-                    error={touched.performance && errors.performance}
-                  >
-                    <Option value="card">aaa</Option>
-                    <Option value="cash">bbb</Option>
-                  </SelectForm>
-                </label>
+                {performanceData.data && !values.performance ? (
+                  renderPerformanceData()
+                ) : values.performanceTitle ? (
+                  <div className={styles['selected-item']}>
+                    {`«${values.performanceTitle}» `}
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        setPerformanceData({
+                          ...performanceData,
+                          data: performances,
+                          sessions,
+                        });
+                        setFieldValue('performance', null);
+                        setFieldValue('session', null);
+                      }}
+                    >
+                      Изменить
+                    </Button>
+                  </div>
+                ) : (
+                  <Fragment>
+                    <div className={styles.load}>
+                      Загружаем подходящие мероприятия
+                    </div>
+                  </Fragment>
+                )}
               </Col>
             </Row>
 
             <Row>
               <Col>
+                {values.performance && !performanceData.sessions && (
+                  <div className={styles.load} style={{ padding: 0 }} />
+                )}
                 <label>
-                  <div className="caption">Расписание</div>
+                  <div className="caption">Выбрать подходящее время</div>
                   <SelectForm
+                    disabled={!values.performance || !performanceData.sessions}
                     name="session"
                     placeholder="Выберите подходящее время"
                     value={values.session}
                     handleChange={setFieldValue}
                     error={touched.session && errors.session}
                   >
-                    <Option value="card">ccc</Option>
-                    <Option value="cash">ddd</Option>
+                    {performanceData.sessions &&
+                    performanceData.sessions.data &&
+                    values.performance ? (
+                      renderSessions()
+                    ) : (
+                      <Option value="" />
+                    )}
                   </SelectForm>
                 </label>
               </Col>
@@ -286,6 +381,17 @@ const BuyTicketFormStep = ({ stepData, setStepData, formikProps }) => {
         );
     }
   };
+
+  if (stepData.finished) {
+    return (
+      <Fragment>
+        <div>
+          <h3>Билет успешно куплен.</h3>
+          Спасибо, что любите наш театр. Ждём Вас!
+        </div>
+      </Fragment>
+    );
+  }
 
   return renderStep(stepData.step);
 };
