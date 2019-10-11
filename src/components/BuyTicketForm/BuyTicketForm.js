@@ -35,6 +35,11 @@ const BuyTicketForm = () => {
 
   const getInitialStepData = () => {
     const localStepData = JSON.parse(localStorage.getItem('buyTicketStepData'));
+
+    if (localStepData && localStepData.finished) {
+      return { ...defaultStepData };
+    }
+
     return { ...defaultStepData, ...localStepData };
   };
 
@@ -113,8 +118,11 @@ const BuyTicketForm = () => {
   return (
     <div>
       <Formik
+        enableReinitialize={stepData.finished}
         validationSchema={schemaArray[stepData.step - 1]}
-        initialValues={getLocalInitialValues()}
+        initialValues={
+          stepData.finished ? initialValues : getLocalInitialValues()
+        }
         isInitialValid={isInitialValid}
         initialErrors
         onSubmit={(values, { setSubmitting }) => {
@@ -129,6 +137,7 @@ const BuyTicketForm = () => {
               performanceTitle,
               ...valuesForm
             } = values;
+
             console.log(valuesForm);
           }
 
