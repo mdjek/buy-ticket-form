@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Checkbox } from 'antd';
-import { SyntheticEvent } from "react";
 
 export interface Props {
-  checked?: boolean,
-  name?: string,
-  label?: string,
-  error?: string,
-  handleChange: (name: string | undefined, e: boolean) => void,
+  checked?: boolean;
+  name?: string;
+  label?: string;
+  error?: string;
+  handleChange: (name: string | undefined, e: boolean) => void;
 }
 
 const CheckboxForm: React.FC<Props> = ({
