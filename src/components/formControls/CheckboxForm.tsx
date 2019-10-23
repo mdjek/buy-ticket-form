@@ -1,17 +1,25 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import { Checkbox } from 'antd';
+import { SyntheticEvent } from "react";
 
-const CheckboxForm = ({
+export interface Props {
+  checked?: boolean,
+  name?: string,
+  label?: string,
+  error?: string,
+  handleChange: (name: string | undefined, e: boolean) => void,
+}
+
+const CheckboxForm: React.FC<Props> = ({
   checked,
   name,
   label,
   error,
   handleChange,
   ...props
-}) => {
+}: Props): React.ReactElement => {
   return (
-    <Fragment>
+    <React.Fragment>
       <Checkbox
         checked={checked}
         name={name}
@@ -21,16 +29,8 @@ const CheckboxForm = ({
         {label}
       </Checkbox>
       <div>{error && <span className="error">{error}</span>}</div>
-    </Fragment>
+    </React.Fragment>
   );
-};
-
-CheckboxForm.propTypes = {
-  checked: PropTypes.bool,
-  name: PropTypes.string,
-  label: PropTypes.string,
-  error: PropTypes.string,
-  handleChange: PropTypes.func,
 };
 
 export default CheckboxForm;

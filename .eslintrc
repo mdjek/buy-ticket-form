@@ -2,11 +2,14 @@
   "extends": [
     "airbnb",
     "react-app",
-    "prettier",
-    "prettier/react"
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
   ],
-  "plugins": ["prettier"],
-  "parser": "babel-eslint",
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "parser": "@typescript-eslint/parser",
   "env": {
     "browser": true,
     "node": true
@@ -17,6 +20,9 @@
     "it": false
   },
   "rules": {
+    "@typescript-eslint/explicit-member-accessibility": 0,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "prettier/prettier": ["error", { "singleQuote": true }],
     "no-nested-ternary": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-curly-newline": "off",
@@ -34,5 +40,12 @@
     "jsx-a11y/label-has-associated-control": [ 2, {
       "controlComponents": ["Input", "InputForm", "SelectForm", "DatePickerForm", "InputMask", "Select"]
     }]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
   }
 }
