@@ -1,4 +1,4 @@
-# buy-ticket-form [![Build Status](https://travis-ci.com/mdjek/buy-ticket-form.svg?branch=master)](https://travis-ci.com/mdjek/buy-ticket-form)
+# Buy ticket form [![Build Status](https://travis-ci.com/mdjek/buy-ticket-form.svg?branch=master)](https://travis-ci.com/mdjek/buy-ticket-form)
 
 Multi-step buy ticket form
 
